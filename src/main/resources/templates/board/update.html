@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script>
+
+        const update = () => {
+            const inputPassword = document.getElementById("boardPassword").value
+            const boardPassword = "[[${boardDetailDTO.boardPassword}]]"
+            if (inputPassword==boardPassword) {
+                updateForm.submit();
+            } else {
+                alert("비밀번호가 틀렸습니다.")
+            }
+        }
+
+        const boardUpdate = () => {
+            const id = document.getElementById("boardId").value
+            const writer = document.getElementById("boardWriter").value
+            const title = document.getElementById("boardTitle").value
+            const contents = document.getElementById("boardContents").value
+            const inputPassword = $("#boardPassword").val(); // ajax로 value값 가져오기
+            const password = "[[${boardDetailDTO.boardPassword}]]"
+            // const boardDate = document.getElementById("boardDate").value
+            const updateData = JSON.stringify({
+                boardId: id,
+                boardWriter: writer,
+                boardTitle: title,
+                boardContents: contents,
+                boardPassword: password
+                // boardPassword: pw,
+                // boardDate: boardDate
+            })
+            console.log(updateData)
+            const reqUrl = "/board/"+id
+            if (inputPassword == password) {
+                $.ajax({
+                    type: "put",
+                    url: reqUrl,
+                    contentType: "application/json",
+                    data: updateData,
+                    success: function () {
+                        location.href = "/board/"+id;
+                    },
+                    error: function () {
+                        alert("ajax 실패")
+                    }
+                })
+            } else {
+                alert("비밀번호가 틀렸습니다")
+            }
+        }
+    </script>
+</head>
+<body>
+<h2>update.html</h2>
+<form action="/board/update" method="post" name="updateForm">
+    <input type="text" id="boardId" name="boardId" th:value="${boardDetailDTO.boardId}">
+    <input type="text" id="boardWriter" name="boardWriter" th:value="${boardDetailDTO.boardWriter}" placeholder="작성자" readonly>
+    <input type="text" id="boardPassword" name="boardPassword" placeholder="비밀번호">
+    <input type="text" id="boardTitle" name="boardTitle" th:value="${boardDetailDTO.boardTitle}" placeholder="제목">
+    <input type="text" id="boardContents" name="boardContents" th:value="${boardDetailDTO.boardContents}" placeholder="내용">
+<!--    <input type="text" id="boardDate" name="boardDate" th:value="${boardDetailDTO.boardDate}">-->
+    <input type="button" th:onclick="update()" value="수정">
+    <input type="button" th:onclick="boardUpdate()" value="수정(put)">
+</form>
+</body>
+</html>

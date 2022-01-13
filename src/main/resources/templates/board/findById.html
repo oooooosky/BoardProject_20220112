@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>findById.html</h2>
+
+<!-- 수정 기능 제작(POST 방식, 폼에서 바로 요청하는) -->
+<!-- (PUT방식, ajax를 이용하여 요청하는) 2가지 해보기 -->
+<!-- 수정화면 update.html에서 비밀번호를 입력받고 일치하면 수정처리, 일치하지 않으면 수정처리 X --->
+
+<table>
+    <thead>
+        <tr>
+            <th>번호</th>
+            <th>작성자</th>
+            <th>제목</th>
+            <th>내용</th>
+            <th>작성시간</th>
+            <th>수정시간</th>
+            <th>수정</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th th:text="${boardDetailDTO.boardId}"></th>
+            <th th:text="${boardDetailDTO.boardWriter}"></th>
+            <th th:text="${boardDetailDTO.boardTitle}"></th>
+            <th th:text="${boardDetailDTO.boardContents}"></th>
+            <th th:text="${boardDetailDTO.createTime}"></th>
+            <th th:text="${boardDetailDTO.updateTime}"></th>
+            <th><a th:href="@{|/board/update/${boardDetailDTO.boardId}|}">수정페이지</a></th>
+        </tr>
+    </tbody>
+</table>
+</body>
+</html>
