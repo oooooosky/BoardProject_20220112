@@ -1,11 +1,20 @@
 package com.icia.board.controller;
 
+import com.icia.board.common.PagingConst;
 import com.icia.board.dto.BoardDetailDTO;
+import com.icia.board.dto.BoardPagingDTO;
 import com.icia.board.dto.BoardSaveDTO;
 import com.icia.board.dto.BoardUpdateDTO;
 import com.icia.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
+
 import lombok.extern.slf4j.Slf4j;
+
+// 잘 보고 import 할 것!!!
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -51,6 +60,26 @@ public class BoardController {
         List<BoardDetailDTO> boardDetailDTOList = bs.findAll();
         model.addAttribute("boardList", boardDetailDTOList);
         return "board/findAll";
+    }
+
+    // 페이징처리(board?page=5)
+    // 5번글(/board/5)
+    // @PageableDefault(page=1) : 별다른 페이징 요청이 없을 때 (처음 요청) 1페이지를 내보내겠다.
+    @GetMapping
+    public String paging(@PageableDefault(page = 1)Pageable pageable ,Model model) {
+        Page<BoardPagingDTO> boardList = bs.paging(pageable);
+        model.addAttribute("boardList", boardList);
+
+        // startPage, endPage 계산
+        // 현재 2페이지 일 때 시작 페이지 1, 끝 페이지 3
+        // 현재 7페이지 일 때 시작 페이지 6, 끝 페이지 8
+        int startPage = (((int) (Math.ceil((double) pageable.getPageNumber() / PagingConst.BLOCK_LIMIT))) - 1) * PagingConst.BLOCK_LIMIT + 1;
+        int endPage = ((startPage + PagingConst.BLOCK_LIMIT - 1) < boardList.getTotalPages()) ? startPage + PagingConst.BLOCK_LIMIT - 1 : boardList.getTotalPages();
+
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
+        return "board/paging";
     }
 
     @GetMapping("/{boardId}")
@@ -127,4 +156,5 @@ public class BoardController {
         return new ResponseEntity(HttpStatus.OK);
 
     }
+
 }
