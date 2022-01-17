@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script>
+
+    </script>
 </head>
 <body>
 <h2>findById.html</h2>
@@ -35,5 +39,51 @@
         </tr>
     </tbody>
 </table>
+
+<div id="comment-write">
+    <input type="text" id="commentWriter" placeholder="작성자"><br>
+    <input type="text" id="commentContents" placeholder="내용"><br>
+    <button id="comment-write-btn">댓글 작성</button>
+</div>
+
+<div id="comment-area">
+    <table>
+        <thead>
+            <tr>
+                <th>댓글번호</th>
+                <th>작성자</th>
+                <th>내용</th>
+                <th>작성시간</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
 </body>
+<script>
+    $("#comment-write-btn").click(function () {
+        console.log("댓글 등록 버튼 클릭")
+        const commentWriter = $("#commentWriter").val()
+        const commentContents = $("#commentContents").val()
+        const boardId = "[[${board.boardId}]]"
+        $.ajax({
+            type: "post",
+            url: "/comment/save",
+            data: {
+                "commentWriter" : commentWriter,
+                "commentContents" : commentContents,
+                "boardId" : boardId
+            },
+            dataType: "json",
+            success: function (result) {
+                console.log(result)
+            },
+            error: function (result) {
+                alert("ajax 실페")
+            }
+        })
+    })
+</script>
 </html>

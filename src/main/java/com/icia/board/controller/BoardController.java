@@ -66,15 +66,15 @@ public class BoardController {
     // 5번글(/board/5)
     // @PageableDefault(page=1) : 별다른 페이징 요청이 없을 때 (처음 요청) 1페이지를 내보내겠다.
     @GetMapping
-    public String paging(@PageableDefault(page = 1)Pageable pageable ,Model model) {
+    public String paging(@PageableDefault(page = 1) Pageable pageable, Model model) {
         Page<BoardPagingDTO> boardList = bs.paging(pageable);
         model.addAttribute("boardList", boardList);
 
         // startPage, endPage 계산
         // 현재 2페이지 일 때 시작 페이지 1, 끝 페이지 3
         // 현재 7페이지 일 때 시작 페이지 6, 끝 페이지 8
-        int startPage = (((int) (Math.ceil((double) pageable.getPageNumber() / PagingConst.BLOCK_LIMIT))) - 1) * PagingConst.BLOCK_LIMIT + 1;
-        int endPage = ((startPage + PagingConst.BLOCK_LIMIT - 1) < boardList.getTotalPages()) ? startPage + PagingConst.BLOCK_LIMIT - 1 : boardList.getTotalPages();
+        int startPage = (((int)(Math.ceil((double) pageable.getPageNumber()/PagingConst.BLOCK_LIMIT)))-1)*PagingConst.BLOCK_LIMIT + 1;
+        int endPage = ((startPage+PagingConst.BLOCK_LIMIT-1)<boardList.getTotalPages())?startPage+PagingConst.BLOCK_LIMIT-1 : boardList.getTotalPages();
 
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);

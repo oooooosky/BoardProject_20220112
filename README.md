@@ -28,3 +28,11 @@
     5. boardContents
     6. boardDate(java.time.LocalDateTime)
     7. toSaveEntity 메서드도 설계해볼 것
+
+#20220117
+## 엔티티 설계
+1. MemberEntity
+   1. id(long), email, password, name             
+2. 회원 : 게시글 = 1 :N 관계
+3. 회원 : 댓글 = 1 : N 관계
+4. 게시글 : 댓글 = 1 : N 괸계
